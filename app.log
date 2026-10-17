@@ -1,0 +1,30 @@
+2026-10-17 09:00:01 INFO Order service started
+2026-10-17 09:00:02 INFO Database connection established
+2026-10-17 09:00:03 INFO Order created order_id=1001
+2026-10-17 09:00:04 INFO Payment initiated order_id=1001
+2026-10-17 09:00:05 INFO Payment completed order_id=1001
+2026-10-17 09:00:06 INFO Order processed order_id=1001
+2026-10-17 09:00:07 WARNING Payment gateway response slow order_id=1002
+2026-10-17 09:00:08 INFO Order created order_id=1002
+2026-10-17 09:00:09 ERROR Payment failed order_id=1002 reason=insufficient_funds
+2026-10-17 09:00:10 INFO Order created order_id=1003
+2026-10-17 09:00:11 INFO Payment completed order_id=1003
+2026-10-17 09:00:12 WARNING Database query took 2.5 seconds
+2026-10-17 09:00:13 ERROR Database connection timeout
+2026-10-17 09:00:14 INFO Database connection re-established
+2026-10-17 09:00:15 INFO Order processed order_id=1003
+2026-10-17 09:00:16 DEBUG Retrying payment request order_id=1002 attempt=2
+2026-10-17 09:00:17 ERROR Payment failed order_id=1002 reason=provider_timeout
+2026-10-17 09:00:18 INFO Order created order_id=1004
+2026-10-17 09:00:19 INFO Payment completed order_id=1004
+2026-10-17 09:00:20 INFO Order processed order_id=1004
+2026-10-17 09:00:21 WARNING API response time exceeded threshold endpoint=/orders duration=1.8
+2026-10-17 09:00:22 INFO Order created order_id=1005
+2026-10-17 09:00:23 ERROR Invalid order request endpoint=/orders reason=missing_customer_id
+2026-10-17 09:00:24 INFO Order created order_id=1006
+2026-10-17 09:00:25 INFO Payment completed order_id=1006
+2026-10-17 09:00:26 INFO Order processed order_id=1006
+2026-10-17 09:00:27 DEBUG Health check completed
+2026-10-17 09:00:28 WARNING Retry limit approaching order_id=1002 attempt=3
+2026-10-17 09:00:29 ERROR Payment permanently failed order_id=1002
+2026-10-17 09:00:30 INFO Order service shutting down
