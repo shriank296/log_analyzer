@@ -1,4 +1,4 @@
-from collections.abc import Generator
+from collections.abc import Generator, Iterator
 from pathlib import Path
 
 
@@ -8,21 +8,18 @@ def read_file(filename: str) -> Generator[str]:
             yield line.rstrip()
 
 
-def process_file(filepath: str) -> dict[str, int]:
+def process_lines(lines: Iterator[str]) -> dict[str, int]:
     result: dict[str, int] = {}
-    for line in read_file(filename=filepath):
+    for line in lines:
         severity = get_severity(line)
-        if severity in result:
-            result[severity] += 1
-        else:
-            result[severity] = 1
+        result[severity] = result.get(severity, 0) + 1
     return result
 
 
-def get_severity(line: str):
+def get_severity(line: str) -> str:
     return line.split(" ")[2]
 
 
 if __name__ == "__main__":
-    output = process_file("app.log")
-    print(output)
+    generator = read_file("app.log")
+    print(process_lines(generator))
