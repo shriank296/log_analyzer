@@ -1,0 +1,7 @@
+2026-10-19 10:00:01 INFO Worker started
+2026-10-19 10:00:05 DEBUG Processing job 101
+2026-10-19 10:00:10 INFO Job 101 completed
+2026-10-19 10:00:15 WARNING Job 102 is taking longer than expected
+2026-10-19 10:00:20 ERROR Job 103 failed
+2026-10-19 10:00:25 INFO Worker shutting down
+2026-10-19 10:00:30 ERROR Failed to reconnect to message broker
