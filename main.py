@@ -3,6 +3,7 @@ from collections.abc import Generator, Iterable, Iterator
 from pathlib import Path
 
 from data import LogLevel
+from utils import time_spent
 
 VALID_LEVELS = {member.value for member in LogLevel}
 
@@ -13,6 +14,7 @@ def read_file(filename: str) -> Generator[str]:
             yield line.rstrip()
 
 
+@time_spent
 def process_lines(lines: Iterator[str], levels: set[str]) -> dict[str, int]:
     result: dict[str, int] = {}
     for line in lines:
@@ -40,6 +42,7 @@ def print_summary(result: dict[str, int]):
     print(f"{'TOTAL':<10}{total:>10}")
 
 
+@time_spent
 def process_files(filenames: Iterable[str], levels: set[str]) -> dict[str, int]:
     temp_dict: dict[str, int] = {}
     for filename in filenames:
@@ -63,4 +66,4 @@ if __name__ == "__main__":
     except FileNotFoundError as err:
         print(f"File was not found: {err}")
         sys.exit(1)
-    print_summary(process_files(["app.log", "database.log", "worker.log"], levels))
+    # print_summary(process_files(["app.log", "database.log", "worker.log"], levels))
