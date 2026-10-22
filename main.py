@@ -1,6 +1,8 @@
 import sys
 from collections.abc import Generator, Iterable, Iterator
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
+from time import perf_counter
 
 from data import LogLevel
 from utils import time_spent
@@ -52,6 +54,25 @@ def process_files(filenames: Iterable[str], levels: set[str]) -> dict[str, int]:
     return temp_dict
 
 
+def process_files_threaded(
+    filenames: Iterable[str], levels: set[str]
+) -> dict[str, int]:
+    with ThreadPoolExecutor(max_workers=3) as executor:
+        temp_dict: dict[str, int] = {}
+        futures = []
+        for filename in filenames:
+            future = executor.submit(process_lines, read_file(filename), levels)
+            futures.append(future)
+        for i, future in enumerate(futures):
+            try:
+                result_dict = future.result()
+                for key in result_dict:
+                    temp_dict[key] = temp_dict.get(key, 0) + result_dict[key]
+            except FileNotFoundError as err:
+                print(f"{i + 1} file does not exit; skipping: {err}")
+        return temp_dict
+
+
 if __name__ == "__main__":
     if len(sys.argv) > 1:
         filename = sys.argv[1]
@@ -60,10 +81,22 @@ if __name__ == "__main__":
     levels = {member.value for member in LogLevel}
     if len(sys.argv) > 3:
         levels = {sys.argv[3]} & levels
-    try:
-        generator = read_file(filename)
-        print_summary(process_lines(generator, levels))
-    except FileNotFoundError as err:
-        print(f"File was not found: {err}")
-        sys.exit(1)
+    # try:
+    #     generator = read_file(filename)
+    #     print_summary(process_lines(generator, levels))
+    # except FileNotFoundError as err:
+    #     print(f"File was not found: {err}")
+    #     sys.exit(1)
     # print_summary(process_files(["app.log", "database.log", "worker.log"], levels))
+    # start = perf_counter()
+    # result = process_files_threaded(["large.log", "large2.log", "large3.log"], levels)
+    # elapsed = perf_counter() - start
+
+    # print(f"Total threaded time: {elapsed:.6f} seconds")
+    # print_summary(result)
+    filenames = ["large.log", "large2.log", "large3.log"]
+    start = perf_counter()
+    result = process_files(filenames, levels)
+    elapsed = perf_counter() - start
+    print(f"Total sequential time: {elapsed:.6f} seconds")
+    print_summary(result)
